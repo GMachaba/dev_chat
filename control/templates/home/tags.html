@@ -1,0 +1,71 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block add_button %}
+<a href="javasript:;" data-href="{% url 'add_tag' %}" class="btn btn-primary mt-2 mt-sm-0 btn-icon-text add-tag-link"><i class="mdi mdi-plus-circle"></i> New Tag </a> 
+{% endblock add_button %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 grid-margin stretch-card">    
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>S/No</th>
+                <th>Tag Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if tags %} {% for tag in tags %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ tag.name }}</td>
+                <td>
+                    <label data-popup="popover" data-placement="top" title="{{tag.description}}" data-trigger="hover" data-content="{{tag.description}}">
+                      {{ tag.description|truncatechars:37 }}
+                    </label>
+                </td>
+                <td>
+                  {% if tag.is_active %}
+                  <label class="badge badge-success">Active</label>
+                  {% else %}
+                  <label class="badge badge-danger">Not Active</label>
+                  {% endif %}
+                </td>
+                <td>
+                  <button data-href="{% url 'edit_tag' tag.pk %}" type="button" class="btn btn-primary btn-rounded btn-icon edit-tag-link">
+                    <i class="mdi mdi-tooltip-edit"></i>
+                  </button>
+
+                  <button data-href="" type="button" class="btn btn-warning btn-rounded btn-icon">
+                    <i class="mdi mdi-delete"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="5">
+                  <div class="text-center alert alert-info">
+                    No tags registered
+                  </div>
+                </td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block static_files %}
+<script src="{% static 'assets/js/tags.js' %}"></script>
+{% endblock static_files %}

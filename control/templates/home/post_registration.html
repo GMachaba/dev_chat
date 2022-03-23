@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+{% block side_bar %}
+
+{% endblock side_bar %}
+{% block top_side_bar %}
+
+{% endblock top_side_bar %}
+{% block content %}
+<div class="someBlock"></div>
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center">POST REGISTRATION</h4>
+                {% load widget_tweaks %}
+                <form class="add-student-post-form" action="{% url 'add_post' owner.pk %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Title:</label>
+                        {% render_field form.title class='form-control' placeholder='Enter Post title' %}
+                        <span class="text-danger">{{ form.title.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        {% render_field form.description class='form-control' placeholder='Enter Descriptions' %}
+                        <span class="text-danger">{{ form.email.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Choose Preffered Tag to request assistance:</label>
+                        {% render_field form.tag_name class='form-data' %}
+                        <span class="text-danger">{{ form.tag_name.errors }}</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary me-2 pull-right"> POST </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block static_files %}
+  <script>
+      $(document).ready(function(){
+        $(".form-data").css("list-style-type","none");
+      });
+
+$(document).on("submit", ".add-student-post-form", function (e) {
+    e.preventDefault();
+    var $form = $(this);
+    var formdata = new FormData($(this)[0]);
+    $('.someBlock').preloader({
+        text: 'Please wait the form is submitting',
+        percent: 100,
+        duration: 5000,
+        zIndex: '99999999999',
+        // setRelative: true
+    });
+    $.ajax({
+        url: $form.attr("action"),
+        type: $form.attr("method"),
+        data: formdata,
+        processData: false,
+        contentType: false
+    }).done(function (response) {
+        try {
+            let data = JSON.parse(response)[0];
+            if (data.status) {
+                setTimeout(function () {
+                    window.location.href = data.url;
+                }, 1000);
+            }
+        } catch (error) {
+            $('.someBlock').preloader('remove');
+        }
+    })
+});
+  </script>
+{% endblock static_files %}

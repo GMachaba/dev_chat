@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% block side_bar %}
+
+{% endblock side_bar %}
+{% block top_side_bar %}
+
+{% endblock top_side_bar %}
+{% block content %}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center">LOGIN FORM</h4>
+                {% load widget_tweaks %}
+                {% if form.errors %}
+                <div class="alert alert-danger mb-3 mt-3" role="alert">
+                    Wrong Username or Password!
+                  </div>
+                {% endif %}
+
+                <form class="" action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Username:</label>
+                        {% render_field form.username class='form-control' placeholder='Enter username' %}
+                        <span class="text-danger">{{ form.username.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        {% render_field form.password class='form-control' placeholder='Enter Password' %}
+                        <span class="text-danger">{{ form.password.errors }}</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary me-2 pull-right"> LOGIN </button>
+                </form>
+                <div>
+                    <p>Don't have an Account? <a href="{% url 'user_registration' %}">Register</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

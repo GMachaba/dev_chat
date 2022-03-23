@@ -1,0 +1,14 @@
+{% load widget_tweaks %}
+<form class="add-tag-form" action="{% url 'add_tag' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Name:</label>
+      {% render_field form.name class='form-control' placeholder='Enter Tag name' %}
+      <span class="text-danger">{{ form.name.errors }}</span>
+    </div>
+    <div class="form-group">
+      <label>Descriptions:</label>
+      {% render_field form.description class='form-control' placeholder='Enter Tag Description' %}
+      <span class="text-danger">{{ form.name.errors }}</span>
+    </div>
+</form>
